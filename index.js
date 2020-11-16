@@ -10,10 +10,6 @@ let persons = [
 ]
 app.use(express.json())
 
-app.get('/api/persons', (request, response) => {
-    response.json(persons)
-})
-
 app.get('/info', (request, response) => {
     response.send(`<div>
     <p>Phonebook has info for ${persons.length} people </p>
@@ -22,12 +18,23 @@ app.get('/info', (request, response) => {
 
 })
 
+app.get('/api/persons', (request, response) => {
+    response.json(persons)
+})
+
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(p => p.id === id)
     console.log(person)
     person ? response.json(person) : response.status(404).end()
 
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    persons = persons.filter(p => p.id !== id)
+
+    response.status(204).end()
 })
 
 const PORT = 3001
