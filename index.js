@@ -1,5 +1,6 @@
 const { request, response } = require('express')
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 let persons = [
@@ -9,6 +10,8 @@ let persons = [
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 },
 ]
 app.use(express.json())
+app.use(morgan('tiny'))
+
 
 app.get('/info', (request, response) => {
     response.send(`<div>
@@ -25,7 +28,7 @@ app.get('/api/persons', (request, response) => {
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(p => p.id === id)
-    console.log(person)
+    //console.log(person)
     person ? response.json(person) : response.status(404).end()
 
 })
