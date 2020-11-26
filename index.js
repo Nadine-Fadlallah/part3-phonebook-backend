@@ -2,7 +2,8 @@ const { request, response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
-
+const cors = require('cors')
+app.use(cors())
 let persons = [
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
     { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
@@ -77,7 +78,9 @@ app.post('/api/persons', (request, response) => {
     response.json(person)
 })
 
-const PORT = 3001
-app.listen(PORT, () => {
+//Now we are using the port defined in environment variable PORT or port 3001 if the environment variable PORT is undefined. 
+//Heroku configures application port based on the environment variable. 
+const PORT = process.env.PORT || 3001app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
+})
 })
