@@ -1,3 +1,8 @@
 //POST https://desolate-river-66152.herokuapp.com/api/persons
-GET  http://localhost:3001/api/persons/5fd69f566df1e41eb05bdb51
+PUT  http://localhost:3001/api/persons/5fc49d46159ed0399453fd67
 Content-Type: application/json
+
+ { 
+    "name": "Anna", 
+    "number": "040-1234551"
+ }
