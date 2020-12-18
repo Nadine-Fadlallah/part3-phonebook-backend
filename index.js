@@ -7,12 +7,11 @@ const cors = require('cors')
 app.use(cors())
 const Person = require('./models/person')
 const morgan = require('morgan')
-const { response } = require('express')
-morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
+morgan.token('body', function (req) { return JSON.stringify(req.body) })
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
     Person.countDocuments({})
         .then(docCount => {
             response.send(`<div>
@@ -44,7 +43,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndRemove(request.params.id)
-        .then(result => {
+        .then(() => {
             response.status(204).end()
         })
         .catch(error => next(error))
@@ -81,7 +80,7 @@ app.post('/api/persons', (request, response, next) => {
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
 
-    if (error.name === 'CastError' && error.kind == 'ObjectId') {
+    if (error.name === 'CastError' && error.kind === 'ObjectId') {
         return response.status(400).send({ error: 'malformatted id' })
     }
     else if (error.name === 'ValidationError') {
@@ -99,8 +98,8 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-//Now we are using the port defined in environment variable PORT or port 3001 if the environment variable PORT is undefined. 
-//Heroku configures application port based on the environment variable. 
+//Now we are using the port defined in environment variable PORT or port 3001 if the environment variable PORT is undefined.
+//Heroku configures application port based on the environment variable.
 const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

@@ -21,7 +21,7 @@ const personSchema = new mongoose.Schema({
 //personSchema.path('_id')
 
 const generateRandomId = () => {
-    return Math.floor(Math.random() * Math.floor(10000));
+    return Math.floor(Math.random() * Math.floor(10000))
 }
 
 const Person = mongoose.model('Person', personSchema)
